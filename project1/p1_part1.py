@@ -29,9 +29,9 @@ while 1:
     
     tcpCliSock, addr = tcpSerSock.accept()
     print( 'Received a connection from:', addr)
-    
+    time.sleep(1)
     message = tcpCliSock.recv(1024)
-    #print( message)
+    #print(message)
     
     # Extract the filename from the given message
     print (message.split()[1])
@@ -66,8 +66,8 @@ while 1:
             time.sleep(1) # need to sleep to make sure all data will be there once we try to recieve it
             resp = recvall(proxy_socket)
             response = resp.decode()
-            print(response)
-            
+            #print(response)
+            print(response.split('\r\n')[0])
             # Create a new file in the cache for the requested file.
             # Also send the response in the buffer to client socket and the corresponding file in the cache
             if(filename[-1:] == '/'):
@@ -75,12 +75,11 @@ while 1:
 
             with open(filename,"wb") as tmpFile:
                 tmpFile.write(resp)
-                print("saved file as:",filename)
+            print("saved file as:",filename)
             
             tcpCliSock.send(resp)
         except Exception as e:
             print (str(e))
             print ("Illegal request")
-
     # Close the client and the server sockets
     tcpCliSock.close()
